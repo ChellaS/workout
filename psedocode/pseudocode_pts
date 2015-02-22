@@ -1,0 +1,165 @@
+Reads input from RMQ
+--------------------
+INPUT: 
+{
+    "proofTitle": "Carbon monoxide over Indian region as observed by MOPITT",
+    "jid": "AEA",
+    "aid": 13335,
+    "correspondingAuthors" : ["I.A. Girach"],
+    "correctionsCount": 15,
+    "pii": "SDF451235478445",
+    "singalPath": "Signals",
+    "zip": "AS-AEA-13335-2014-10-15.zip",
+    "stage": "supplier",
+    "ucorrected": "MAIN",
+    "url": "http://live.elsevierproofcentral.com/authorproofs/3qtlhfglhashql54rfghkf87935679/supplier"
+}
+
+interface uploader {
+    public function fileTransfer($adapter, $source, $destination);
+    public function getMd5($adapter, $source);
+    public function compareMd5($md5String1, $md5String2);
+}
+
+class vtwUploaderService extends uploader {
+    public function vtwUploaderService($adapter) {
+        $this->adapters->fileSystem = $adapter['fileSystem'];
+        $this->adapters->s3 = $adapter['S3'];
+    }
+
+    public function fileTransferer($adapter, $source, $destination) {
+        Assert::isObject($adapter, "Adopter should be an Object!");
+        Assert::isEmpty($source, "Value should not be empty!");
+        Assert::isEmpty($destination, "Value should not be empty!");
+        $adapter['destination']->copy($source, $adapter['source'], $destination, true);
+        $sourceMd5String = $this->getMd5($adapter['source'], $source);
+        $downloadedSourceMd5String = $this->getMd5($adapter['destination'], $source); 
+        $response = $this->compareMd5($sourceMd5String, $downloadedSourceMd5String);
+        return $response;
+    }
+
+    public function getMd5($adapter, $source) {
+        return $adapter->getMd5($source);
+    }
+
+    public function compareMd5($md5One, $md5Two) {
+        if ($md5One !== $md5Two) {
+            return false;
+        }
+        return true;
+    }
+
+    public function __destruct() {
+        unset($this);
+    } 
+}
+
+interface jsonBuilder {
+    public function addJsonValue($index, $value);
+    public function addJsonIndex($index, $newIndex);
+    public function mergeJson($arrayOne, $arrayTwo);
+    public getJson();
+}
+
+jsonCreator extends jsonBuilder {
+    private $_json;
+    public function jsonCreator($json) {
+        Assert::isJson($json, "Invalid json!");
+        $this->_json = $json;
+    }
+
+    public function addJsonIndex($index, $newIndex) {
+        Assert::isEmpty($index, "Value should not be empty!");
+        Assert::isEmpty($newIndex, "Value should not be empty!");
+        Assert::isArrayExits($this->_json[$index], "Index is not found!");
+        $this->_json[$index][$newIndex] = [];
+    }
+
+    public function addJsonValue($index, $value) {
+        Assert::isEmpty($index, "Value should not be empty!");
+        Assert::isEmpty($value, "Value should not be empty!");
+        $this->_json[$index] = $value;
+    }
+
+    public function mergeJson($arrayOne, $arrayTwo) {
+        Assert::isArray($arrayOne, ""\$arrayOne\" is not an array!");
+        Assert::isArray($arrayTwo, ""\$arrayTwo\" is not an array!");
+        mergeArray($arrayOne, $arrayTwo);
+    }
+
+    public function getJson() {
+        Assert::isJson($this->_json);
+        return $this->_json;
+    }
+
+    public function __destruct() {
+        unset($this);
+    }
+}
+
+interface apiService {
+    public function makeConnection($host, $username, $password, $port, $optional);
+    pubic function apiPost($json, $uri, $timeOut);
+    public function apiGet($json, $uri, $timeOut);
+}
+
+vtwApiService extends apiService {
+    private $_host;
+    private $_username;
+    private $_password;
+    private $_port;
+    private $_options;
+
+    public function vtwApiService(array $credentials) {
+        $this->_host = $credentials['host'];
+        $this->_username = $credentials['username'];
+        $this->_password = $credentials['password'];
+        $this->_port = $credentials['port'];
+        $this->_options = $credentials['options'];
+    }
+
+    public function makeConnection($host) {
+        Assert::isEmpty($host, "\"\$host\" should not be empty!");
+        $client = new GuzzleHttp\Client(['base_url' => $hots]);
+        return $client;
+    }
+
+    public function apiPost($json, $uri, $timeOut) {
+        Assert::isJson($json, "\"\$jon\" is not valid!");
+        Assert::isEmpty($uri, "\"\$uri should not be empty!");
+        $client = $this->makeConnection($this->_host);
+        $client->post($uri, $json, ['auth' => ['username', 'password', 'digest'], 'connection_timeout' => $timeOut]);
+    }
+
+    public function __destruct() {
+        unset($this);
+    }
+}
+
+interface xmlSingalGenerator {
+    public function replaceContent(xmlString, placeHolder, value);
+    public function validateXmlAgainstDtd();
+    public function getXml();
+}
+
+vtwService.php
+==============
+$uploadService = new vtwUploaderService($adapters);
+$uploadService->fileTransferer($uploadService->adapters, $source, $target);
+
+vtwJsonService.php
+==================
+$jsonService = new jsonCreator($json);
+$jsonService->addJsonValue($index, $value);
+$jsonService->getJson();
+
+vtwApiService.php
+=================
+$vtwApiService = new vtwApiService([host, username, password, port]);
+$vtwApiService->apiPost(json, uri, timeOut);
+
+vtwSignalService.php
+====================
+$vtwSignalService = new vtwSignalService($xmlString);
+$vtwSignalService->replaceContent($xmlString, placeHolder, value);
+$vtwSingalService->getXml();

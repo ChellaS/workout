@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query</title>
+    <link rel="stylesheet" type="text/css" href="../css/query.css"/>
+    <script src="../js/jquery.js"></script>
+    <script src="../ckeditor/ckeditor/ckeditor.js"></script>
+    <script src="../ckeditor/ckeditor/adapters/jquery.js"></script>
+</head>
+<body>
+<div class="query_box">
+    <div class="label">
+        <span>
+            Author
+        </span>
+        <span>
+            Publisher
+        </span>
+    </div>
+    <div class="query_container">
+        <div class="query_list_box">
+            <ul id="query_list">
+            </ul>
+        </div>
+        <div class="query_author">
+            <span class="panel">
+                <span class="question">
+                    <textarea id="question" placeholder="Please choose query"></textarea>
+                </span>
+                <span class="reply">
+                    <textarea name="editor1" id="editor1" rows="5" cols="250"></textarea>
+                </span>
+            </span>
+            <span class='buttons'>
+                <button id="create">Create</button>
+                <button id="delete_query">Delete</button>
+            </span>
+            <span class="problem_type_box">
+                <select id="problem_types">
+                    <option id="0" value="">Please select problem type</option>
+                </select>
+                <select id="query_types">
+                    <option id="0" value="">Please select Query type</option>
+                </select>                
+            </span>
+        </div>
+        <div class="query_mastercopier">
+            <span class="panel">
+                <span class="question">
+                </span>
+                <span class="reply">
+                    <textarea></textarea>
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/query.js"></script>
+</html>

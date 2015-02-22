@@ -1,0 +1,31 @@
+{
+  "name": "pc-ui-component",
+  "version": "0.0.0",
+  "authors": [
+    "Peroli Sivaprakasam <peroli.sivaprakasam@tnqsoftware.co.in>",
+    "Aravindan Jeevanandam <aravindan.jeevanandam@tnqsoftware.co.in>"
+  ],
+  "description": "Proofcentral UI",
+  "main": "index.html",
+  "license": "Proprietary",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "minified": "2014.0.0-beta5.0",
+    "radio": "https://github.com/uxder/Radio.git#v0.2.0",
+    "loglevel": "~0.5.0",
+    "jsclass": "http://jsclass.jcoglan.com/assets/JS.Class.4-0-4.zip",
+    "namespacejs": "Namespace.js#*",
+    "rangy": "https://rangy.googlecode.com/files/rangy-1.3alpha.772.zip",
+    "jsxml": "https://github.com/Greendrake/jsxml.git",
+    "ckeditor": "https://github.com/ckeditor/ckeditor-releases/archive/full/4.4.0.zip",
+    "jqForm": "https://github.com/malsup/form/archive/3.50.zip"
+
+  }
+}

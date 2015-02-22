@@ -1,0 +1,31 @@
+OnLoad Of Proof
+---------------
+Get query data
+Get query problem type data
+
+OnLoad Of Query Window
+------------------------
+Set query labels upto query length (i.e no queries length)
+Construct first query and answer in dialogue box for first time load
+Construct first query no being selected for first time load
+Construct query and answer with current state
+Construct answer in CKEditor
+Construct query status/statistics
+Construct query problem type on dropdown menu
+Load query dialogue box
+
+Query Functionalities
+---------------------------
+Locate query location On Load/Selecting specific query to there location
+Change query and response for their respective query selection
+Get query state
+Construct nessacery buttons as per query state
+Allow View/Add/Delete/Replace for attachments if query is not closed/deleted/reply/readonly mode
+Allow Remarks View/Add/Replace for attachments if query is not closed/deleted/reply/readonly mode
+Allow View for attachments If Query is not closed/reply/readonly
+Allow View for Remarks If Query is not closed/reply/readonly
+Change Attachement Count Status for current query
+Allow save for un closed/deleted/raise state query
+Disallow query save/delete/reply/addition for closed/deleted/readonly state
+Allow query selection on query state raise mode and query is un closed/delete
+Allow query reply on query state is reply and query is unclosed/deleted

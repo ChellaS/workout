@@ -1,0 +1,23 @@
+{
+    "m1":{
+        "question": "Test 1",
+        "reply": "",
+        "problem_type": 5,
+        "query_type": 3,
+        "status": "open"
+    },
+    "m2":{
+        "question": "Test 2",
+        "reply": "",
+        "problem_type": 6,
+        "query_type": 4,
+        "status": "open"
+    },
+    "m3":{
+        "question": "Test 3",
+        "reply": "",
+        "problem_type": 7,
+        "query_type": 5,
+        "status": "open"
+    }        
+};
