@@ -5,6 +5,7 @@ var queries = {
         "reply": "This is my first Reply",
         "problem_type": "F05",
         "query_type": 0,
+        "attach": 0,
         "status": "closed"
     },
     "M2":{
@@ -12,6 +13,7 @@ var queries = {
         "reply": "This is my first Reply LHLHLHLH",
         "problem_type": "F05",
         "query_type": 1,
+        "attach": 3,
         "status": "open"
     },
     "M3":{
@@ -19,11 +21,12 @@ var queries = {
         "reply": "",
         "problem_type": "F10",
         "query_type": 2,
+        "attach": 5,
         "status": "open"
     },
-    "total_query": 3,
+    "total": 3,
     "answered": 0,
-    "deleted_query": 0,
+    "deleted": 0,
     "mode": "raise"       
 };
 
@@ -64,23 +67,22 @@ var message = {
 };
 
  (function (global) {
-    function PublisherQuery (message, queryList) {
-        this.message = message;
-        this.queryList = queryList;
+    function PublisherQuery (config, queryList) {
+        this.queryList = queryList;        
     };
 
-    PublisherQuery.prototype.getData = function() {
+    Query.prototype.getData = function() {
         return this.queryList;
     };
 
-    PublisherQuery.prototype.addQuery = function(question, optional) {
+    Query.prototype.addQuery = function(question, optional) {
         var query = [], label = "", newQuery = {},
         defaultValue = document.getElementById('question').getAttribute('placeholder'),
         key = "";
         this.isEmpty(question, message.question.empty);
         question = (question === defaultValue) ? "" : question;
         this.data.total_query += 1;
-        label = "M" + this.data.total_query;
+        label = this.label + this.data.total_query;
         query = {
             "question" : question,
             "reply": "",
@@ -94,7 +96,7 @@ var message = {
         this.data[label] = query;
     };
     
-    PublisherQuery.prototype.isAnyQueryFoundUnsaved = function() {
+    Query.prototype.isAnyQueryFoundUnsaved = function() {
         var key = "", queries = this.data, initial = "";
         for (key in queries) {
             initial = queries[key].status;
@@ -106,7 +108,7 @@ var message = {
         return {"status": false, "msg": ""};
     };
         
-    PublisherQuery.prototype.updateQuery = function(id, optional) {
+    Query.prototype.updateQuery = function(id, optional) {
         this.isEmpty(id, message.id.empty);
         var query = "", 
         queryStatus = this.data[id].status,
@@ -122,9 +124,11 @@ var message = {
                 query[key] = optional[key];
             }
         }
+        
+        return true;
     };
 
-    PublisherQuery.prototype.isAllowedToUpdate = function (value) {
+    Query.prototype.isAllowedToUpdate = function (value) {
         if (value == "closed" 
             || value == "deleted") {
             return false;
@@ -133,7 +137,7 @@ var message = {
         return true;
     };
         
-    PublisherQuery.prototype.deleteQuery = function(id) {
+    Query.prototype.deleteQuery = function(id) {
         this.isEmpty(id, message.id.empty);
         var queryStatus = this.data[id].status;
         if ( this.isAllowedToUpdate(queryStatus) === false) {
@@ -144,21 +148,23 @@ var message = {
         this.updateQuery(id, {"question": "This query has been deleted"});
         this.data[id]['status'] = "deleted";
         this.data.deleted_query += 1;
+        return true;
     };
 
-    PublisherQuery.prototype.isEmpty = function(value, message) {
-        var value = value.trim();
+    Query.prototype.isEmpty = function(value, message) {
+        value = value.trim();
+        
         if (typeof value === undefined || value == "") {
             throw (message);
             return;
         };
     };
     
-    PublisherQuery.prototype.showMessage = function(msg) {
+    Query.prototype.showMessage = function(msg) {
         alert(msg);
     };
     
-    PublisherQuery.prototype.init = function() {
+    Query.prototype.init = function() {
             this.data = this.getData();
             // this.updateQuery("3", {"question" : "UpdatedQuery"});
             // this.deleteQuery("2");
@@ -182,10 +188,10 @@ var message = {
         };
     };
     
-    QueryWidget.prototype.addQueryLabel = function (label, selector) {
+    QueryWidget.prototype.addQueryLabel = function (lbl, selector) {
         var list = "",
         queryLength = query.func.data.total_query,
-        id = 0, className = "", label = label + queryLength;
+        id = 0, className = "", label = lbl + queryLength;
         selector = document.getElementById(selector);
         className = query.func.data[label].status;
         list = document.createElement("li");
@@ -201,7 +207,7 @@ var message = {
     };
         
     QueryWidget.prototype.loadReply = function(reply, selector, status) {
-        var answerNode = "",
+        var answerNode = "";
         selector = document.getElementsByClassName(selector)[0];
         answerNode = selector.firstElementChild.getElementsByClassName("reply")[0].firstElementChild;
         answerNode.value = reply;
@@ -323,7 +329,7 @@ var message = {
     };
 
     QueryWidget.prototype.setEditorMode = function(stat) {
-        var state = false, 
+        state = false, 
         stat = (typeof stat === undefined) ? "closed": stat;
         if (stat === "closed" || stat === "deleted") {
             state = true;
